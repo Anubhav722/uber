@@ -16,10 +16,14 @@ class UserSerializer(serializers.ModelSerializer):
 
 class DriverSerializer(serializers.ModelSerializer):
     user = UserSerializer()
+    capacity = serializers.IntegerField(min_value=1, max_value=6)
+    seats_available = serializers.IntegerField(min_value=1, max_value=6)
 
     class Meta:
         model = Driver
-        fields = ('id', 'user', 'cab_no', 'seats_available', 'capacity', 'location')
+        fields = ('id', 'user',
+                  'cab_no', 'seats_available',
+                  'capacity', 'contact_no')
 
     def create(self, validated_data):
       user = create_user(validated_data.pop('user'))
@@ -32,17 +36,17 @@ class PassengerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Passenger
         fields = ('id', 'user',
-                  'location', 'contact_no')
+                  'contact_no')
 
     def create(self, validated_data):
       user = create_user(validated_data.pop('user'))
       return Passenger.objects.create(user=user, **validated_data)
 
 
-class TravelHistory(serializers.ModelSerializer):
+class TravelHistorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TravelHistory
-        fields = ('id', 'driver',
-                  'passenger', 'pickup_location',
+        fields = ('id', 'seats_requested',
+                  'pickup_location',
                   'drop_location')
