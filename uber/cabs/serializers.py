@@ -44,9 +44,16 @@ class PassengerSerializer(serializers.ModelSerializer):
 
 
 class TravelHistorySerializer(serializers.ModelSerializer):
+    choices = ['GO', 'POOL', 'SUV']
+    seats_requested = serializers.IntegerField(min_value=1, max_value=6, required=False)
+    preference = serializers.ChoiceField(choices)
 
     class Meta:
         model = TravelHistory
         fields = ('id', 'seats_requested',
                   'pickup_location',
-                  'drop_location')
+                  'drop_location',
+                  'preference')
+
+    # def get_preference(self, obj):
+    #   return obj.get_preference_display()

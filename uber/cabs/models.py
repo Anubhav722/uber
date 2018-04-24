@@ -9,11 +9,14 @@ from django.dispatch import receiver
 from core.models import BaseModel
 
 # Third party imports
+
 from model_utils import Choices
+
 # Create your models here.
 
 
 class Driver(BaseModel):
+
     user = models.ForeignKey(User, related_name='driver')
     cab_no = models.CharField(max_length=10)
     seats_available = models.PositiveIntegerField()
@@ -25,6 +28,7 @@ class Driver(BaseModel):
 
 
 class Passenger(BaseModel):
+
     user = models.ForeignKey(User, related_name='passenger')
     contact_no = models.CharField(max_length=12)
 
@@ -34,7 +38,7 @@ class Passenger(BaseModel):
 
 class TravelHistory(BaseModel):
     PREFERENCE_TYPE = Choices('GO', 'POOL', 'SUV')
-
+    STATUS = Choices('ACTIVE', 'FINISHED')
     driver = models.ForeignKey(Driver)
     passenger = models.ForeignKey(Passenger)
     pickup_location = models.CharField(max_length=40)
@@ -43,6 +47,8 @@ class TravelHistory(BaseModel):
     preference = models.CharField(max_length=4,
                                   choices=PREFERENCE_TYPE,
                                   default=PREFERENCE_TYPE.GO)
+    status = models.CharField(max_length=8,
+                              choices=STATUS)
 
     def __unicode__(self):
         return (self.pickup_location + " --> " + self.drop_location)
