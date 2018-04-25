@@ -9,9 +9,9 @@ from cabs.helpers import create_user
 
 class UserSerializer(serializers.ModelSerializer):
 
-  class Meta:
-    model = User
-    fields = ('first_name', 'last_name', 'email', 'username', 'password')
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email', 'username', 'password')
 
 
 class DriverSerializer(serializers.ModelSerializer):
@@ -26,8 +26,8 @@ class DriverSerializer(serializers.ModelSerializer):
                   'capacity', 'contact_no')
 
     def create(self, validated_data):
-      user = create_user(validated_data.pop('user'))
-      return Driver.objects.create(user=user, **validated_data)
+        user = create_user(validated_data.pop('user'))
+        return Driver.objects.create(user=user, **validated_data)
 
 
 class PassengerSerializer(serializers.ModelSerializer):
@@ -39,13 +39,14 @@ class PassengerSerializer(serializers.ModelSerializer):
                   'contact_no')
 
     def create(self, validated_data):
-      user = create_user(validated_data.pop('user'))
-      return Passenger.objects.create(user=user, **validated_data)
+        user = create_user(validated_data.pop('user'))
+        return Passenger.objects.create(user=user, **validated_data)
 
 
 class TravelHistorySerializer(serializers.ModelSerializer):
     choices = ['GO', 'POOL', 'SUV']
-    seats_requested = serializers.IntegerField(min_value=1, max_value=6, required=False)
+    seats_requested = serializers.IntegerField(min_value=1,
+                                               max_value=6, required=False)
     preference = serializers.ChoiceField(choices)
 
     class Meta:

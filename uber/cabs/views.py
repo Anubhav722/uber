@@ -4,7 +4,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from cabs.models import Driver, Passenger, TravelHistory
-from cabs.serializers import DriverSerializer, PassengerSerializer, TravelHistorySerializer, DriverPassengerHistorySerializer
+from cabs.serializers import (DriverSerializer,
+                              PassengerSerializer,
+                              TravelHistorySerializer,
+                              DriverPassengerHistorySerializer)
 from cabs.permissions import IsDriver, IsPassenger
 from cabs.helpers import find_cab, active_user_rides, get_seats
 # Create your views here.
