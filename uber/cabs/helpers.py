@@ -20,7 +20,7 @@ def get_seats(preference, seats):
 
 def find_cab(preference, seats):
     riders = get_seats(preference, seats)
-    driver = Driver.objects.filter(seats_available=riders)
+    driver = Driver.objects.filter(seats_available__gte=riders)
     if driver.exists():
         driver = driver.first()
         driver.seats_available -= riders

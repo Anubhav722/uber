@@ -55,5 +55,14 @@ class TravelHistorySerializer(serializers.ModelSerializer):
                   'drop_location',
                   'preference')
 
-    # def get_preference(self, obj):
-    #   return obj.get_preference_display()
+
+class DriverPassengerHistorySerializer(serializers.ModelSerializer):
+    driver = DriverSerializer()
+
+    class Meta:
+        model = TravelHistory
+        fields = ('id', 'seats_requested',
+                  'pickup_location',
+                  'drop_location',
+                  'preference',
+                  'driver', 'status')

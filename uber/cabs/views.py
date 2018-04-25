@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from cabs.models import Driver, Passenger, TravelHistory
-from cabs.serializers import DriverSerializer, PassengerSerializer, TravelHistorySerializer
+from cabs.serializers import DriverSerializer, PassengerSerializer, TravelHistorySerializer, DriverPassengerHistorySerializer
 from cabs.permissions import IsDriver, IsPassenger
 from cabs.helpers import find_cab, active_user_rides, get_seats
 # Create your views here.
@@ -82,8 +82,6 @@ class CabBooking(generics.GenericAPIView):
             return serializer.errors
 
     def put(self, request, *args, **kwargs):
-        # import ipdb; ipdb.set_trace()
-        print self.request
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             if not request.user.username:
@@ -93,12 +91,14 @@ class CabBooking(generics.GenericAPIView):
                     status=status.HTTP_403_FORBIDDEN)
             driver = Driver.objects.filter(user=request.user)
             if driver.exists():
-                # import ipdb; ipdb.set_trace()
                 history = TravelHistory.objects.filter(driver=driver).last()
                 if history:
                     if history.status == 'ACTIVE':
                         history.status = 'FINISHED'
                         history.save()
+                        driver = driver.first()
+                        driver.seats_available += history.seats_requested
+                        driver.save()
                         return Response(
                             {'status': 'Success',
                              'details': 'Ended trip successfully'},
@@ -114,14 +114,25 @@ class CabBooking(generics.GenericAPIView):
                     status=status.HTTP_403_FORBIDDEN)
 
         else:
-            # import ipdb; ipdb.set_trace()
             return Response(
                 {'status': 'Failed',
                  'details': serializer.errors},
                 status=status.HTTP_403_FORBIDDEN)
-            # return serializer.errors
 
 
-# class EndTrip(generics.GenericAPIView):
-#     queryset = TravelHistory.objects.all()
-#     serializer_class = 
+class TravelHistoryView(generics.ListAPIView):
+    queryset = TravelHistory.objects.all()
+    serializer_class = DriverPassengerHistorySerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        user = self.request.user
+        driver = Driver.objects.filter(user=user)
+        if driver.exists():
+            history = TravelHistory.objects.filter(driver=driver)
+            return history
+        passenger = Passenger.objects.filter(user=user)
+        if passenger.exists():
+            history = TravelHistory.objects.filter(passenger=passenger)
+            return history
+        return []
