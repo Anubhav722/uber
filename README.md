@@ -16,3 +16,12 @@ $ pip install requirements.txt
 
 ### SOME SS GET STARTED
 
+![alt text](https://github.com/Anubhav722/uber/blob/master/postman_images/postman_1.png)
+
+![alt text](https://github.com/Anubhav722/uber/blob/master/postman_images/postman_2.png)
+
+![alt text](https://github.com/Anubhav722/uber/blob/master/postman_images/postman_3.png)
+
+![alt text](https://github.com/Anubhav722/uber/blob/master/postman_images/postman_4.png)
+
+![alt text](https://github.com/Anubhav722/uber/blob/master/postman_images/postman_5.png)
