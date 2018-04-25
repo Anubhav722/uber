@@ -16,7 +16,9 @@ from model_utils import Choices
 
 
 class Driver(BaseModel):
-
+    """
+    Model treating driver and cab as a same entity.
+    """
     user = models.ForeignKey(User, related_name='driver')
     cab_no = models.CharField(max_length=10)
     seats_available = models.PositiveIntegerField()
@@ -28,7 +30,6 @@ class Driver(BaseModel):
 
 
 class Passenger(BaseModel):
-
     user = models.ForeignKey(User, related_name='passenger')
     contact_no = models.CharField(max_length=12)
 
@@ -37,6 +38,10 @@ class Passenger(BaseModel):
 
 
 class TravelHistory(BaseModel):
+    """
+    Contains travel history for both driver/passenger.
+    Other attributes like booking preference/status.
+    """
     PREFERENCE_TYPE = Choices('GO', 'POOL', 'SUV')
     STATUS = Choices('ACTIVE', 'FINISHED')
     driver = models.ForeignKey(Driver)
