@@ -82,7 +82,11 @@ class CabBooking(generics.GenericAPIView):
                      'details': 'Unauthenticated User'},
                     status=status.HTTP_403_FORBIDDEN)
         else:
-            return serializer.errors
+            return Response(
+                {'status': 'Failed',
+                 'details': serializer.errors},
+                status=status.HTTP_400_BAD_REQUEST)
+            # return serializer.errors
 
     def put(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
